@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Casino</title>
+		<link rel="stylesheet" type="text/css" href="Casino.css">
+	</head>
+	<body onload="utilisateur(); interval_coul();" onUnload="window.clearInterval(interval)">
+
+		<script type="text/javascript">
+			let soldePC = 0;
+			
+			function utilisateur ()
+			{
+				var nom = prompt("Veuillez entrer votre nom d'utilisateur svp :","Entrez ici votre prénom");
+				if (nom == null) 
+				{
+					alert ("Vous avez cliqué sur annuler");
+				}
+
+				else
+				{
+					document.getElementById("nomUtilisateur").innerHTML = "Player : "+nom;
+				}
+
+			}
+
+			let couleur = new Array ("#000000","#FF00FF");
+        	var a = 0;
+
+        	function change_coul()
+        	{
+            	let Titre = document.querySelector(".bienvenue");
+            	Titre.style.color = couleur[a];
+            	a++;
+            	if (a>2) {a=0;}
+        	}
+
+        	function interval_coul()
+        	{
+            	let interval = setInterval("change_coul()",700);
+        	}
+			
+			//fonction pour dire si le joueur a gagné ou perdu
+			function hasard ()
+			{
+				let recupMise = document.getElementById("mise"); //récupère la valeur de la mise entrée par l'utilisateur
+				let ch = document.getElementById("selection").options[document.getElementById("selection").selectedIndex].value;
+
+				if (recupMise.max >= parseInt(recupMise.value) && parseInt(recupMise.value) > 0) 
+				{
+
+					let choix = parseInt(Math.round(Math.random()*36));
+				
+					let valeurRendue;//renvoie à l'utilisateur la somme gagnée ou perdue
+
+					if (!choix) 
+					{
+						valeurRendue = 0;
+						document.getElementById("affiche").innerHTML = "Vous avez perdu." 
+						document.getElementById("affiche1").innerHTML = "Le nombre choisi est :"+choix;
+					}
+					else if (parseInt(ch) === choix) 
+					{
+						valeurRendue = 35 * recupMise.value;
+					
+						document.getElementById("affiche").innerHTML = "Vous avez gagné." ;
+						document.getElementById("affiche1").innerHTML ="Le nombre est effectivement "+choix+".";
+						document.getElementById("affiche2").innerHTML="Vous avez gagné "+valeurRendue+" milles francs.";
+					}
+
+					else if ((parseInt(ch) === 37) && (choix % 2 === 0))
+					{
+						valeurRendue = 2 * recupMise.value;
+					
+						document.getElementById("affiche").innerHTML = "Vous avez gagné." ;
+						document.getElementById("affiche1").innerHTML ="Ce nombre ("+choix+") est effectivement pair.";
+						document.getElementById("affiche2").innerHTML="Vous avez gagné "+valeurRendue+" milles francs.";
+					}
+
+					else if ((parseInt(ch) === 38) && (choix % 2 !== 0))
+					{
+						valeurRendue = 2 * recupMise.value;
+						document.getElementById("affiche").innerHTML = "Vous avez gagné." ;
+						document.getElementById("affiche1").innerHTML ="Ce nombre ("+choix+") est effectivement impair.";
+						document.getElementById("affiche2").innerHTML="Vous avez gagné "+valeurRendue+" milles francs.";
+					}
+
+					else
+					{
+						valeurRendue = 0;
+						document.getElementById("affiche").innerHTML = "Vous avez perdu."
+						document.getElementById("affiche1").innerHTML = "Le nombre choisi est :"+choix;
+						document.getElementById("affiche2").innerHTML = null;
+					}
+
+					if (valeurRendue) 
+					{ 
+						recupMise.setAttribute('max',parseInt(recupMise.max)+parseInt(valeurRendue));
+						document.getElementById("affiche3").innerHTML = "Votre solde est de : " +recupMise.max;
+						document.getElementById("affiche4").innerHTML = "Le solde du PC est :"+soldePC;
+						setTimeout("gagner();",300);
+						window.setTimeout("masquergif();", 6000);
+					}
+
+					else
+					{
+						soldePC = parseInt(soldePC) + parseInt(recupMise.value);
+						recupMise.setAttribute('max',parseInt(recupMise.max)-parseInt(recupMise.value));
+						document.getElementById("affiche3").innerHTML = "Votre solde est de : "+recupMise.max;
+						document.getElementById("affiche4").innerHTML = "Le solde du PC est :"+soldePC;
+						setTimeout("perdre();",300);
+						window.setTimeout("masquergif();", 6000);
+						
+					}
+				}
+
+
+				else if (parseInt(recupMise.value) <= 0 || verif_champ(recupMise.value) === false)
+				{
+					document.getElementById("affiche").innerHTML = "Veuillez entrer la mise svp:";
+					document.getElementById('affiche1').innerHTML = null;
+					document.getElementById('affiche2').innerHTML = null;
+					document.getElementById('affiche3').innerHTML = null;
+					document.getElementById('affiche4').innerHTML = null;
+				}
+
+				else
+				{
+					document.getElementById("affiche").innerHTML = "Vous n'avez pas le solde nécessaire pour jouer";
+					document.getElementById('affiche1').innerHTML = null;
+					document.getElementById('affiche2').innerHTML = null;
+					document.getElementById('affiche3').innerHTML = null;
+					document.getElementById('affiche4').innerHTML = null;
+				}
+			}
+
+
+			function gagner ()
+			{
+				var img = document.createElement("img");
+				var div = document.getElementById("image");
+				img.src = "gifbravo.gif";
+				div.appendChild(img);
+				img.setAttribute("style","width : 350px");
+				img.setAttribute("style","height : 350px");
+			}
+
+
+			function perdre ()
+			{
+				var img = document.createElement("img");
+				var div = document.getElementById("image");
+				img.src = "gifpleure.gif";
+				div.appendChild(img);
+				img.setAttribute("style","width : 350px");
+				img.setAttribute("style","height : 350px");
+			}
+
+
+			function masquergif()
+			{
+  				document.getElementById("image").innerHTML=null;
+			}
+ 
+ 			function verif_champ(champ)
+ 			{
+ 				if(champ == "")
+ 				{
+ 					return false;
+ 				}
+
+ 				else
+ 				{
+ 					return true;
+ 				}
+ 			}
+		</script>
+
+
+		<div id="corps">
+			<div id="entete">
+				<div>
+        			<nav role = "navigation">
+        				<div id="menuToggle">
+
+        					<input type="checkbox"/>
+
+        					<span></span>
+        					<span></span>
+        					<span></span>
+
+        					<ul id="menu">
+        						<a href="../index.html"><li>Home</li></a>
+        						<a href="Regle.html"><li>Règles du jeu</li></a>
+        						<a href="#"><li>Info</li></a>
+        						<a href="#"><li>Contact</li></a>
+        						<a href="#"><li>Show me more</li></a>
+        					</ul>
+        					
+        				</div>
+        			</nav>
+        		</div>
+				<div><img src="../logo_casino.webp" id="logo"  alt=""></div>
+        		<div><marquee class="bienvenue" behavior="" direction="" scrollamount="15"><h1>Bonne chance à vous cher joueur!! Utilisez à bon escient vos 100 milles francs...!</h1></marquee></div>
+        		<div id="nomUtilisateur"></div>
+			</div>
+
+			<div id="corps1">
+	
+				<div id="corps2">
+
+					<select id="selection">
+						<option value = "">Choisir</option>
+						<option value = "37">Pair</option>
+						<option value = "38">Impair</option>
+						<option value = "1">1</option>
+						<option value = "2">2</option>
+						<option value = "3">3</option>
+						<option value = "4">4</option>
+						<option value = "5">5</option>
+						<option value = "6">6</option>
+						<option value = "7">7</option>
+						<option value = "8">8</option>
+						<option value = "9">9</option>
+						<option value = "10">10</option>
+						<option value = "11">11</option>
+						<option value = "12">12</option>
+						<option value = "13">13</option>
+						<option value = "14">14</option>
+						<option value = "15">15</option>
+						<option value = "16">16</option>
+						<option value = "17">17</option>
+						<option value = "18">18</option>
+						<option value = "19">19</option>
+						<option value = "20">20</option>
+						<option value = "21">21</option>
+						<option value = "22">22</option>
+						<option value = "23">23</option>
+						<option value = "24">24</option>
+						<option value = "25">25</option>
+						<option value = "26">26</option>
+						<option value = "27">27</option>
+						<option value = "28">28</option>
+						<option value = "29">29</option>
+						<option value = "30">30</option>
+						<option value = "31">31</option>
+						<option value = "32">32</option>
+						<option value = "33">33</option>
+						<option value = "34">34</option>
+						<option value = "35">35</option>
+						<option value = "36">36</option>
+					</select>
+
+					<div>
+						<div class="texte">Veuillez entrer la mise svp :<br></div>
+						<input type="number" id="mise" name="" max="100" min="0" required placeholder="Entrez la mise svp">
+					</div>
+
+					<div id="affiche"></div><br>
+					<div id="affiche1"></div><br>
+					<div id="affiche2"></div><br>
+					<div id="affiche3"></div><br>
+					<div id="affiche4"></div><br>
+
+					<div id="jeu">
+						<div class="essai"><input type="submit" class="taille" value = "GO!" name="" onclick="hasard();"></div>
+
+						<div class="essai"><input type="submit" class="taille" value="Recommencer" name="" onclick="history.go();"></div>
+					</div>
+					
+				</div>	
+
+				<div id="image"></div>
+
+			</div>
+		</div>
+	</body>
+</html>

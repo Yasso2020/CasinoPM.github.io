@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Règles du jeu</title>
+		<link rel="stylesheet" type="text/css" href="Regle.css">
+	</head>
+	<body onload="interval_coul();" onUnload="window.clearInterval(interval)">
+		<script>
+			let couleur = new Array ("#000000","#FF00FF");
+        	var a = 0;
+
+        	function change_coul()
+        	{
+            	let Titre = document.querySelector(".bienvenue");
+            	Titre.style.color = couleur[a];
+            	a++;
+            	if (a>2) {a=0;}
+        	}
+
+        	function interval_coul()
+        	{
+            	let interval = setInterval("change_coul()",700);
+        	}
+		</script>
+
+		<div id="entete">
+			<div>
+				<nav role = "navigation">
+					<div id="menuToggle">
+
+						<input type="checkbox"/>
+
+						<span></span>
+						<span></span>
+						<span></span>
+
+						<ul id="menu">
+							<a href="Casino.html"><li>Jouer</li></a>
+							<a href="../index.html"><li>Home</li></a>
+							<a href="#"><li>Info</li></a>
+							<a href="#"><li>Contact</li></a>
+							<a href="#"><li>Show me more</li></a>
+						</ul>
+						
+					</div>
+				</nav>
+			</div>
+			<div><img src="../logo_casino.webp" id="logo"  alt=""></div>
+			<div><marquee class="bienvenue" behavior="" direction="" scrollamount="15"><h1>Règles du jeu de la roulette....</h1></marquee></div>
+		</div>
+		<div id="regle">
+			<h2>Règles du jeu</h2>
+				<div id="texte"> 
+					Choisir un nombre entre 1 et 36 ou les options pair et impair.<br>
+					Ensuite entrez la mise. Vous disposez initialement de 100 milles francs.<br>
+					Le joueur gagne :<br>
+					- 35 fois la mise si l'ordinateur trie le même nombre que celui choisi par l'utilisateur;<br>
+					- 2 fois la mise si l'ordinateur trie un nombre pair et que l'utilisateur a choisi l'option pair;<br>
+					- 2 fois la mise si l'ordinateur trie un nombre impair et que l'utilisateur a choisi l'option impair.<br>
+
+					Dans tout les autres cas, la mise est perdue.<br>
+				</div>
+		</div>
+
+	</body>
+
+</html>
